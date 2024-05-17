@@ -53,6 +53,15 @@ var findTheLongestSubstring_main_error = function(s) {
     return Math.max(...sumArray);
 };
 
+/**
+ * preCounter[i] 记录读取第i个元素时，0～i分别包含多少个元音字母【a, e, i, o, u】
+ * [j, i]区间包含的元音字母个数为偶数的条件表达式为：(preCounter[i] - preCounter[j - 1]) % 2 === 0
+ * 暴力解法：二维数组（第一维记录【a, e, i, o, u】， 第二维记录s中第i为包含元音的数量）
+ * 每次判断更新满足当前字母的minIndex和maxIndex
+ * - 当前i统计为偶数，则0～i满足条件
+ * - 当前i统计为奇数，存在统计为奇数的j，则j-1～i满足条件
+ */
+
 // @lc code=start
 /**
  * @param {string} s
@@ -60,19 +69,32 @@ var findTheLongestSubstring_main_error = function(s) {
  */
 //
 var findTheLongestSubstring = function(s) {
-    const record = new Array(5).fill(new Array(5).fill(0));
     const metaLetter = ['a', 'e', 'i', 'o', 'u'];
-    // 统计前缀和
-    for (let i = 0; i <= s.length; i++) {
-        const metaIndex = metaLetter.indexOf(s[i]);
+    if (s.length === 1) {
+        return metaLetters.includes(s[0]) ? 0 : 1;
+    }
+    const metaCounter = new Array(metaLetter.length).fill(0).map(() => new Array(s.length).fill(0));
+
+    for (let i = 0; i < s.length; i++) {
+        let letter = s[i];
+        // 统计前缀和
+        const metaIndex = metaLetter.indexOf(letter);
         if (metaIndex >= 0) {
-            // 当前为元音
-            record[metaIndex][i] = i > 0 ? record[metaIndex][i - 1] + 1 : 1;
-        }  else {
-            record[metaIndex][i] = i > 0 ? record[metaIndex][i - 1] : 0;
+            if (i === 0) {
+                metaCounter[metaIndex][i] = 1;
+            } else {
+                metaCounter[metaIndex][i] = metaCounter[metaIndex][i - 1] +  1;
+            }
+        }
+        let times = 0;
+        metaCounter.forEach((value) => {
+            times += value;
+        })
+        if (times % 2 === 0) {
+            satisfiedIndexes.push(i);
         }
     }
-
+    return satisfiedIndexes[satisfiedIndexes]
 };
 // @lc code=end
 console.log(findTheLongestSubstring('eleetminicoworoep'))
