@@ -17,10 +17,7 @@
  * @return {boolean}
  */
 var isMatch = function(s, p) {
-    let sIndex = 0, pIndex = 0;
-    while(sIndex < s.length && pIndex < p.length) {
-        if ()
-    }
+    
 };
 // @lc code=end
 
