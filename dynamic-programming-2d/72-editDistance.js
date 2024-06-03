@@ -7,16 +7,6 @@
  * 插入一个字符、删除一个字符、替换一个字符
  * 
  * 例：word1 = "intention", word2 = "execution"  输出：5
- *    i n t e n t i o n
- * e
- * x
- * e
- * c
- * u
- * t
- * i
- * o
- * n
  * 
  * 题目分析：
  *  将s1转换为s2，用二维数组dp[m][n]来记录
