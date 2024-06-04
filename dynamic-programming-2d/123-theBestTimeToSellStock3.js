@@ -69,26 +69,25 @@ var maxProfit = function(prices) {
     return 0;
   }
   // 五维分别记录第i结束后的情况：不进行任何操作、买1次、买1卖1、买2卖1、买2卖2
-  let record = new Array(5).fill(0), maxProfit = 0;
-  record[1] = -prices[0];
+  let record = new Array(4).fill(0), maxProfit = 0;
+  record[0] = -prices[0];
   for (let i = 1; i< prices.length; i++) {
-    let newRecord = new Array(5).fill(0);
-    newRecord[0] = record[0];
+    let newRecord = new Array(4).fill(0);
     // 本次买入 or 历史买1
-    newRecord[1] = Math.max(record[0] - prices[i], record[1]);
+    newRecord[0] = Math.max(-prices[i], record[0]);
     // 本次卖出 or 历史买1卖1
-    newRecord[2] = Math.max(record[1] + prices[i], record[2]);
+    newRecord[1] = Math.max(record[0] + prices[i], record[1]);
     if (i >= 2) {
       // 本次买入 or 历史买2卖1
-      newRecord[3] = record[2] - prices[i];
+      newRecord[2] = record[1] - prices[i];
     }
     if (i >= 3) {
-      newRecord[3] = Math.max(newRecord[3], record[3])
+      newRecord[2] = Math.max(newRecord[2], record[2])
       // 本次卖出 or 历史买2卖2
-      newRecord[4] = record[3] + prices[i]; 
+      newRecord[3] = record[2] + prices[i]; 
     }
     if (i >= 4) {
-      newRecord[4] = Math.max(newRecord[4], record[4]);
+      newRecord[3] = Math.max(newRecord[3], record[3]);
     }
     maxProfit = Math.max(...newRecord);
     record = newRecord;
@@ -106,4 +105,17 @@ var maxProfit = function(prices) {
  * 【5】
  */
 
+
+var maxProfit_opt = function(prices) {
+  const n = prices.length;
+  let buy1 = -prices[0], buy2 = -prices[0];
+  let sell1 = 0, sell2 = 0;
+  for (let i = 1; i < n; i++) {
+      buy1 = Math.max(buy1, -prices[i]);
+      sell1 = Math.max(sell1, buy1 + prices[i]);
+      buy2 = Math.max(buy2, sell1 - prices[i]);
+      sell2 = Math.max(sell2, buy2 + prices[i]);
+  }
+  return sell2;
+};
 console.log(maxProfit([1,2,3,4,5]))
